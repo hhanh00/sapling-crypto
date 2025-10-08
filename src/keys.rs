@@ -583,7 +583,8 @@ impl EphemeralPublicKey {
         jubjub::ExtendedPoint::from_bytes(bytes).map(EphemeralPublicKey)
     }
 
-    pub(crate) fn to_bytes(&self) -> EphemeralKeyBytes {
+    /// Serialize to bytes
+    pub fn to_bytes(&self) -> EphemeralKeyBytes {
         EphemeralKeyBytes(self.0.to_bytes())
     }
 }
