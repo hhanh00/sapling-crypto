@@ -1,4 +1,5 @@
 use rand::{CryptoRng, RngCore};
+use redjubjub::{Signature, SpendAuth};
 
 use crate::keys::SpendAuthorizingKey;
 
@@ -25,6 +26,11 @@ impl super::Spend {
         } else {
             Err(SignerError::WrongSpendAuthorizingKey)
         }
+    }
+
+    /// Apply a signature that was computed externally
+    pub fn apply_signature(&mut self, signature: Signature<SpendAuth>) {
+        self.spend_auth_sig = Some(signature);
     }
 }
 
