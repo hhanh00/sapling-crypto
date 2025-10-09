@@ -69,6 +69,11 @@ impl SpendUpdater<'_> {
         Ok(())
     }
 
+    /// Sets the witness merkle path for the spent note's zk proof.
+    pub fn set_witness(&mut self, witness:incrementalmerkletree::MerklePath<crate::Node, 32> ) {
+        self.0.witness = Some(witness);
+    }
+
     /// Sets the ZIP 32 derivation path for the spent note's signing key.
     pub fn set_zip32_derivation(&mut self, derivation: Zip32Derivation) {
         self.0.zip32_derivation = Some(derivation);
