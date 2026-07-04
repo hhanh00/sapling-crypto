@@ -266,9 +266,9 @@ impl Domain for SaplingDomain {
     fn parse_note_plaintext_without_memo_ivk(
         &self,
         ivk: &Self::IncomingViewingKey,
-        plaintext: &Self::CompactNotePlaintextBytes,
+        plaintext: &[u8],
     ) -> Option<(Self::Note, Self::Recipient)> {
-        sapling_parse_note_plaintext_without_memo(self, plaintext.as_ref(), |diversifier| {
+        sapling_parse_note_plaintext_without_memo(self, plaintext, |diversifier| {
             DiversifiedTransmissionKey::derive(ivk, diversifier)
         })
     }
@@ -276,9 +276,9 @@ impl Domain for SaplingDomain {
     fn parse_note_plaintext_without_memo_ovk(
         &self,
         pk_d: &Self::DiversifiedTransmissionKey,
-        plaintext: &Self::CompactNotePlaintextBytes,
+        plaintext: &[u8],
     ) -> Option<(Self::Note, Self::Recipient)> {
-        sapling_parse_note_plaintext_without_memo(self, plaintext.as_ref(), |diversifier| {
+        sapling_parse_note_plaintext_without_memo(self, plaintext, |diversifier| {
             diversifier.g_d().map(|_| *pk_d)
         })
     }
@@ -360,10 +360,6 @@ memuse::impl_no_dynamic_usage!(CompactOutputDescription);
 impl ShieldedOutput<SaplingDomain> for CompactOutputDescription {
     fn ephemeral_key(&self) -> EphemeralKeyBytes {
         self.ephemeral_key.clone()
-    }
-
-    fn cmstar(&self) -> &<SaplingDomain as zcash_note_encryption::Domain>::ExtractedCommitment {
-        &self.cmu
     }
 
     fn cmstar_bytes(&self) -> [u8; 32] {
