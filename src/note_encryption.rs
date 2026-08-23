@@ -113,6 +113,7 @@ where
     Some((note, to))
 }
 
+#[derive(Clone)]
 pub struct SaplingDomain {
     zip212_enforcement: Zip212Enforcement,
 }
@@ -398,7 +399,10 @@ pub fn sapling_note_encryption<R: RngCore>(
 #[allow(clippy::needless_bool)]
 pub fn plaintext_version_is_valid(zip212_enforcement: Zip212Enforcement, leadbyte: u8) -> bool {
     match zip212_enforcement {
-        Zip212Enforcement::Off => leadbyte == 0x01,
+        // The 0x02 leadbyte is accepted even when ZIP 212 is not enforced:
+        // Ycash wallets activated ZIP 212 before the network's grace period
+        // began, so pre-Canopy notes may carry the ZIP 212 version byte.
+        Zip212Enforcement::Off => leadbyte == 0x01 || leadbyte == 0x02,
         Zip212Enforcement::GracePeriod => leadbyte == 0x01 || leadbyte == 0x02,
         Zip212Enforcement::On => leadbyte == 0x02,
     }

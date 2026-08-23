@@ -7,6 +7,18 @@ and this library adheres to Rust's notion of
 
 ## [Unreleased]
 
+### Added
+- `sapling_crypto::zip32::ExtendedFullViewingKey::from_diversifiable_full_viewing_key`,
+  constructing a master-level extended full viewing key from a
+  `DiversifiableFullViewingKey`.
+- `sapling_crypto::note_encryption::SaplingDomain` now implements `Clone`.
+
+### Changed
+- `sapling_crypto::note_encryption::plaintext_version_is_valid` now also
+  accepts the `0x02` plaintext lead byte when ZIP 212 is not enforced, to
+  support notes produced by Ycash wallets that activated ZIP 212 ahead of the
+  network's grace period.
+
 ## [0.7.0] - 2026-04-21
 
 ### Changed

@@ -643,6 +643,23 @@ impl ExtendedFullViewingKey {
             dk: self.dk,
         }
     }
+
+    /// Constructs a master-level `ExtendedFullViewingKey` from a
+    /// `DiversifiableFullViewingKey`.
+    ///
+    /// The resulting key has depth zero and a zero chain code; it can view
+    /// and derive payment addresses from the given diversifiable key, but
+    /// cannot be used to derive child keys.
+    pub fn from_diversifiable_full_viewing_key(dfvk: &DiversifiableFullViewingKey) -> Self {
+        Self {
+            depth: 0,
+            parent_fvk_tag: FvkFingerprint::from(&dfvk.fvk).tag(),
+            child_index: KeyIndex::Master,
+            chain_code: ChainCode::new([0u8; 32]),
+            fvk: dfvk.fvk.clone(),
+            dk: dfvk.dk.clone(),
+        }
+    }
 }
 
 /// A Sapling key that provides the capability to view incoming and outgoing transactions.
